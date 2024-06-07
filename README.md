@@ -1,1 +1,1 @@
-# electron-app1
+# Example app for Electron, Mikro-orm, Typescript, Vue, Quasar environment
