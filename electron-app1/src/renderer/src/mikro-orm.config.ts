@@ -1,6 +1,6 @@
 import { Options, SqliteDriver } from '@mikro-orm/sqlite'
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection'
-import { Blog } from './entities/blog'
+import { Blog } from '../../main/entities/blog'
 
 const config: Options = {
   // for simplicity, we use the SQLite database, as it's available pretty much everywhere

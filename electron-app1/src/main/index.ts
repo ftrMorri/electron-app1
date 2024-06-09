@@ -2,6 +2,10 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { SqliteDriver } from '@mikro-orm/sqlite'
+import { MikroORM } from '@mikro-orm/core'
+import { Blog } from "./entities/blog"
+import { TsMorphMetadataProvider } from '@mikro-orm/reflection'
 
 function createWindow(): void {
   // Create the browser window.
@@ -52,6 +56,27 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  ipcMain.on('log', (m: any) => console.log(m))
+
+  ipcMain.on("db.open", async () => {
+    var orm = await MikroORM.init({
+      driver: SqliteDriver,
+      dbName: 'sqlite.db',
+      entities: [Blog],
+      discovery: { disableDynamicFileAccess: true },
+      metadataProvider: TsMorphMetadataProvider,
+      debug: true,
+    });
+  
+    const blog = await orm.em.findOne(Blog, 1);
+    if (blog !== null) {
+      blog.title = "foo";
+    } else {
+      console.log("blog is NULL");
+    }
+    await orm.em.flush();  
+  })
 
   createWindow()
 

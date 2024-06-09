@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { Suspense } from 'vue';
 import MainLayout from './layouts/MainLayout.vue'
-
-// const ipcHandle = () => window.electron.ipcRenderer.send('ping')
 </script>
 
 <template>

@@ -1,28 +1,12 @@
 <script setup async lang="ts">
-import { MikroORM } from '@mikro-orm/core';
-import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
-import { SqliteDriver } from '@mikro-orm/sqlite';
-import { Blog } from '@renderer/entities/blog';
 import { ref } from 'vue'
 
 const strings = ref<string[]>([])
+window.electron.ipcRenderer.send('ping')
 
-const modifyRecord = async function () {
-  var orm = await MikroORM.init({
-    driver: SqliteDriver,
-    dbName: 'sqlite.db',
-    entities: [Blog],
-    discovery: { disableDynamicFileAccess: true },
-    metadataProvider: TsMorphMetadataProvider,
-    debug: true,
-  });
-
-  const blog = await orm.em.findOne(Blog, 1);
-  if (blog !== null) {
-    blog.title = "foo";
-  }
-  await orm.em.flush();
-
+const modifyRecord = async function () {  
+  window.electron.ipcRenderer.send("ping");
+  window.electron.ipcRenderer.send("db.open");
   strings.value.push("Done!");
 }
 </script>
